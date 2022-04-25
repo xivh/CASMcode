@@ -78,7 +78,7 @@ jsonParser &to_json(const Completer::EnumOption &enum_opt, jsonParser &json) {
 ParentInputParser make_enum_parent_parser(
     Log &log, jsonParser const &json_options,
     jsonParser const &cli_options_as_json) {
-  log.indent() << "Input from JSON (--input or --setings):\n"
+  log.indent() << "Input from JSON (--input or --settings):\n"
                << json_options << std::endl
                << std::endl;
   log.indent() << "Input from `casm enum` options:\n"
