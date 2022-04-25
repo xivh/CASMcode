@@ -67,7 +67,7 @@ std::string ConfigEnumStrainInterface::desc() const {
   std::string custom_options =
       "  axes: matrix or JSON object (optional)                           \n"
       "    Coordinate axes of the DoF grid. Default value is the identity \n"
-      "    matrix of DoF space dimension Each element in an axis vector   \n"
+      "    matrix of DoF space dimension. Each element in an axis vector   \n"
       "    correponds to an individual DoF. Each axis vector corresponds  \n"
       "    to a normal mode. Use the option                               \n"
       "    `\"print_dof_space_and_quit\": true` to print DoF space        \n"
@@ -166,7 +166,7 @@ std::string ConfigEnumStrainInterface::desc() const {
       "      '{ \n"
       "         \"confignames\" : [\"SCEL4_1_4_1_0_0_0/3\"],\n"
       "         \"increment\" : [0.01, 0.01, 0.01, 0., 0., 0.],\n"
-      "         \"max\" : [0.05, 0.05, 0,05, 0., 0., 0.]\n"
+      "         \"max\" : [0.05, 0.05, 0.05, 0., 0., 0.]\n"
       "       }' \n\n";
 
   return name() + ": \n\n" + description + custom_options +
