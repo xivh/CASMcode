@@ -165,7 +165,7 @@ std::string ConfigEnumStrainInterface::desc() const {
       "      casm enum --method ConfigEnumStrain -i \n"
       "      '{ \n"
       "         \"confignames\" : [\"SCEL4_1_4_1_0_0_0/3\"],\n"
-      "         \"increment\" : [0.01, 0.01, 0.01, 0., 0., 0.],\n"
+      "         \"increment\" : [0.01, 0.01, 0.01, 0.01, 0.01, 0.01],\n"
       "         \"max\" : [0.05, 0.05, 0.05, 0., 0., 0.]\n"
       "       }' \n\n";
 
