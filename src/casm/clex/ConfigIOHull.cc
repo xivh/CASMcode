@@ -192,22 +192,24 @@ const Hull &BaseHull<ValueType>::_hull() const {
 const std::string OnHull::Name = "on_hull";
 
 const std::string OnHull::Desc =
-    "Whether configuration is a vertex on the formation_energy convex hull "
-    "(i.e., is a groundstate)."
+    "Whether configuration is a vertex on the formation_energy convex hull."
     " Only one Configuration out of a set that have identical or almost "
-    "identical points in"
-    " composition/energy space will return true."
-    " Accepts arguments ($selection,$composition,$dim_tol,$bottom_tol)."
-    " ($selection may be one of: <filename>, 'ALL', 'CALCULATED', 'MASTER' "
-    "<--default)"
-    " ($composition may be one of: 'comp', 'atom_frac' <--default)"
-    " ($dim_tol: tolerance for detecting composition dimensionality, "
-    "default=1e-8)"
-    " ($bottom_tol: tolerance for detecting which facets form the convex hull "
-    "bottom, default=1e-8)"
-    " For 'comp', 'formation_energy' is used. For 'atom_frac', "
-    "'formation_energy_per_atom' is used."
-    " Ex: on_hull, on_hull(MASTER,comp).";
+    "identical points in composition/energy space will return true.\n"
+    "Accepts arguments ($selection,$composition,$dim_tol,$bottom_tol).\n"
+    " $selection may be one of: <filename>, 'ALL', 'CALCULATED', 'MASTER' "
+    "(default)\n"
+    " $composition may be one of: 'comp', 'atom_frac' (default)\n"
+    " $dim_tol: tolerance for detecting composition dimensionality, "
+    "(default=1e-8)\n"
+    " $bottom_tol: tolerance for detecting which facets form the convex hull "
+    "bottom (default=1e-8)\n"
+    "For 'comp', 'formation_energy' is used. For 'atom_frac', "
+    "'formation_energy_per_atom' is used.\n"
+    " Ex: on_hull, on_hull(MASTER,comp)\n"
+    "Note that this returns true for every vertex of the convex hull, "
+    "including those that are on the upper convex hull. In order to check "
+    "the lower convex hull, use hull_dist instead.\n"
+    " Ex: lt(hull_dist(CALCULATED, 0.00001)";
 
 /// \brief Constructor
 OnHull::OnHull() : BaseHull<bool>(Name, Desc) {}
@@ -238,18 +240,20 @@ const std::string HullDist::Name = "hull_dist";
 
 const std::string HullDist::Desc =
     "Distance, in eV, of a configuration's formation_energy_per_atom above the "
-    "convex hull."
-    " Accepts arguments ($selection,$composition,$dim_tol,$bottom_tol)."
-    " ($selection may be one of: <filename>, 'ALL', 'CALCULATED', 'MASTER' "
-    "<--default)"
-    " ($composition may be one of: 'comp', 'atom_frac' <--default)."
-    " ($dim_tol: tolerance for detecting composition dimensionality, "
-    "default=1e-8)"
-    " ($bottom_tol: tolerance for detecting which facets form the convex hull "
-    "bottom, default=1e-8)"
+    "lower convex hull.\n"
+    "Accepts arguments ($selection,$composition,$dim_tol,$bottom_tol).\n"
+    " $selection may be one of: <filename>, 'ALL', 'CALCULATED', 'MASTER' "
+    "(default)\n"
+    " $composition may be one of: 'comp', 'atom_frac' (default)\n"
+    " $dim_tol: tolerance for detecting composition dimensionality, "
+    "(default=1e-8)\n"
+    " $bottom_tol: tolerance for detecting which facets form the convex hull "
+    "bottom (default=1e-8)"
     " For 'comp', 'formation_energy' is used. For 'atom_frac', "
     "'formation_energy_per_atom' is used."
-    " Ex: hull_dist, hull_dist(MASTER,comp).";
+    " Ex: hull_dist, hull_dist(MASTER,comp)"
+    "This can be used in order to find configurations on the lower convex hull."
+    " Ex: lt(hull_dist(CALCULATED, 0.00001)";
 
 /// \brief Constructor
 HullDist::HullDist() : BaseHull<double>(Name, Desc) {}
@@ -276,18 +280,23 @@ const std::string OnClexHull::Desc =
     "convex hull (i.e., is a *predicted* groundstate)."
     " Only one Configuration out of a set that have identical or almost "
     "identical points in"
-    " composition/energy space will return true."
-    " Accepts arguments ($selection,$composition,$dim_tol,$bottom_tol)."
-    " ($selection may be one of: <filename>, 'ALL', 'CALCULATED', 'MASTER' "
-    "<--default)"
-    " ($composition may be one of: 'comp', 'atom_frac' <--default)"
-    " ($dim_tol: tolerance for detecting composition dimensionality, "
-    "default=1e-8)"
-    " ($bottom_tol: tolerance for detecting which facets form the convex hull "
-    "bottom, default=1e-8)"
+    " composition/energy space will return true.\n"
+    " Accepts arguments ($selection,$composition,$dim_tol,$bottom_tol).\n"
+    " $selection may be one of: <filename>, 'ALL', 'CALCULATED', 'MASTER' "
+    "(default)\n"
+    " $composition may be one of: 'comp', 'atom_frac' (default)\n"
+    " $dim_tol: tolerance for detecting composition dimensionality, "
+    "(default=1e-8)\n"
+    " $bottom_tol: tolerance for detecting which facets form the convex hull "
+    "bottom (default=1e-8)\n"
     " For 'comp', 'clex(formation_energy)' is used. For 'atom_frac', "
-    "'clex(formation_energy_per_atom)' is used."
-    " Ex: clex_hull_dist, clex_hull_dist(MASTER,comp).";
+    "'clex(formation_energy_per_atom)' is used.\n"
+    " Ex: on_clex_hull, on_clex_hull(MASTER,comp)\n"
+    "Note that this returns true for every vertex of the clex convex hull, "
+    "including those that are on the upper convex hull. In order to check "
+    "the lower clex convex hull, use clex_hull_dist instead.\n"
+    " Ex: lt(clex_hull_dist(CALCULATED, 0.00001)";
+;
 
 /// \brief Constructor
 OnClexHull::OnClexHull()
@@ -321,18 +330,20 @@ const std::string ClexHullDist::Name = "clex_hull_dist";
 
 const std::string ClexHullDist::Desc =
     "Distance, in eV, of a configuration's *cluster-expanded* "
-    "formation_energy_per_atom above the convex hull."
-    " Accepts arguments ($selection,$composition,$dim_tol,$bottom_tol)."
-    " ($selection may be one of: <filename>, 'ALL', 'CALCULATED', 'MASTER' "
-    "<--default)"
-    " ($composition may be one of: 'comp', 'atom_frac' <--default)"
-    " ($dim_tol: tolerance for detecting composition dimensionality, "
-    "default=1e-8)"
-    " ($bottom_tol: tolerance for detecting which facets form the convex hull "
-    "bottom, default=1e-8)"
+    "formation_energy_per_atom above the lower (predicted) convex hull.\n"
+    " Accepts arguments ($selection,$composition,$dim_tol,$bottom_tol).\n"
+    " $selection may be one of: <filename>, 'ALL', 'CALCULATED', 'MASTER' "
+    "(default)\n"
+    " $composition may be one of: 'comp', 'atom_frac' (default)\n"
+    " $dim_tol: tolerance for detecting composition dimensionality, "
+    "(default=1e-8)\n"
+    " $bottom_tol: tolerance for detecting which facets form the convex hull "
+    "bottom (default=1e-8)\n"
     " For 'comp', 'clex(formation_energy)' is used. For 'atom_frac', "
-    "'clex(formation_energy_per_atom)' is used."
-    " Ex: clex_hull_dist, clex_hull_dist(MASTER,comp).";
+    "'clex(formation_energy_per_atom)' is used.\n"
+    " Ex: clex_hull_dist, clex_hull_dist(MASTER,comp)\n"
+    "This can be used to find configurations on the lower (predicted) convex hull.\n"
+    " Ex: lt(clex_hull_dist(CALCULATED, 0.00001)";
 
 /// \brief Constructor
 ClexHullDist::ClexHullDist()
