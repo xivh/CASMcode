@@ -3,6 +3,8 @@
 #include "casm/app/DirectoryStructure.hh"
 #include "casm/casm_io/dataformatter/DataFormatter_impl.hh"
 #include "casm/casm_io/json/jsonParser.hh"
+#include "casm/clex/Clexulator.hh"
+#include "casm/clex/PrimClex.hh"
 #include "casm/clex/ConfigMapping.hh"
 #include "casm/clex/Configuration_impl.hh"
 #include "casm/clex/io/json/ConfigMapping_json_io.hh"
@@ -153,6 +155,42 @@ StructureMap<Configuration>::map(
     return result;
   }
 
+  // my fix for n_optimal
+  // what is the diff between n_optimal and maps.size()?
+  if (map_result.n_optimal() > 1) {
+    std::cout << map_results.maps.size() << " maps, looking for lowest point correlations..." << std::endl;
+    float point_corr_1;
+    float point_corr_2;
+    float avg_corr; // test for smallest average of point correlations
+    float min_avg_corr = 1;
+    auto min_map = map_result.maps.begin();
+    for (auto it = map_result.maps.begin(); it != map_result.maps.end(); ++it) {
+      Configuration test_config = it->second.config;
+      std::string basis_set_name = m_primclex_ptr->settings().default_clex().bset;
+      Eigen::VectorXd corr = correlations(test_config, m_primclex_ptr->clexulator(basis_set_name));
+      point_corr_1 = corr[1];
+      point_corr_2 = corr[2];
+      avg_corr = (point_corr_1 + point_corr_2)/2;
+      if (avg_corr < min_avg_corr) {
+        min_avg_corr = avg_corr;
+        min_map = it;
+        std::cout << "1: " << point_corr_1 << " 2: " << point_corr_2 << " (min)" << std::endl;
+      }
+      else {
+        std::cout << "1: " << point_corr_1 << " 2: " << point_corr_2 << std::endl;
+      }
+    }
+    for (auto it = map_result.maps.begin(); it != map_result.maps.end(); ) {
+      if (it == min_map) {
+        it++;
+      }
+      else {
+        it = map_result.maps.erase(it);
+      }
+    }
+  }
+
+  // if there are still multiple optimal, my fix failed so don't import/update
   if (map_result.n_optimal() > 1) {
     res.fail_msg = "There were " + std::to_string(map_result.n_optimal()) +
                    " optimal mappings, when only one was expected.";
