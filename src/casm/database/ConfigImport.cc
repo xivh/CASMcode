@@ -156,18 +156,20 @@ StructureMap<Configuration>::map(
   }
 
   // my fix for n_optimal
-  // what is the diff between n_optimal and maps.size()?
+  // allows mapping to B2 structure by selecting lowest avg. of point correlations
   if (map_result.n_optimal() > 1) {
-    std::cout << map_results.maps.size() << " maps, looking for lowest point correlations..." << std::endl;
+    // what is the diff between n_optimal and maps.size()?
+    std::cout << map_result.maps.size() << " maps, looking for lowest point correlations..." << std::endl;
     float point_corr_1;
     float point_corr_2;
     float avg_corr; // test for smallest average of point correlations
     float min_avg_corr = 1;
+    std::string basis_set_name = m_primclex_ptr->settings().default_clex().bset;
+    Clexulator clex = m_primclex_ptr->clexulator(basis_set_name);
     auto min_map = map_result.maps.begin();
     for (auto it = map_result.maps.begin(); it != map_result.maps.end(); ++it) {
       Configuration test_config = it->second.config;
-      std::string basis_set_name = m_primclex_ptr->settings().default_clex().bset;
-      Eigen::VectorXd corr = correlations(test_config, m_primclex_ptr->clexulator(basis_set_name));
+      Eigen::VectorXd corr = correlations(test_config, clex);
       point_corr_1 = corr[1];
       point_corr_2 = corr[2];
       avg_corr = (point_corr_1 + point_corr_2)/2;
