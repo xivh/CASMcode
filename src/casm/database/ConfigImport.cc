@@ -155,6 +155,22 @@ StructureMap<Configuration>::map(
     return result;
   }
 
+  // my fix for large costs
+  // I am getting huge atomic deformation scores when importing B2 with vacancies into B2 without vacancies
+  float mapping_cost_tol = 0.1;
+  float max_mapping_cost = 0.;
+  for (auto const &map : map_result.maps) {
+    if (map.first.cost > max_mapping_cost) {
+      max_mapping_cost = map.first.cost;
+    }
+  }
+  if (max_mapping_cost >= mapping_cost_tol) {
+      res.fail_msg = "Outside mapping cost tolerance: " + std::to_string(max_mapping_cost);
+      std::cout << "Outside mapping cost tolerance: " << std::to_string(max_mapping_cost) << std::endl;
+      *result++ = std::move(res);
+      return result;
+  }
+  
   // my fix for n_optimal
   // allows mapping to B2 structure by selecting lowest avg. of point correlations
   if (map_result.n_optimal() > 1) {
